@@ -8,7 +8,7 @@ const uuid = uuidv4();
 
 const storage = new Storage({
     projectId: "learning-projects-21d64",
-    keyFilename: './sa.json'
+    keyFilename: "./sa.json"
 });
 
 const bucket = storage.bucket("gs://learning-projects-21d64.firebasestorage.app/");
