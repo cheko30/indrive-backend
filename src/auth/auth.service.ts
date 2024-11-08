@@ -49,7 +49,10 @@ export class AuthService {
 
     async login(loginData: LoginAuthDto) {
         const { email, password } = loginData;
-        const userFound = await this.usersRepository.findOneBy({email: email});
+        const userFound = await this.usersRepository.findOne({
+            where: { email: email },
+            relations: ['roles']
+        });
 
         if(!userFound) {
             return new HttpException('El email no esta registrado', HttpStatus.NOT_FOUND);
