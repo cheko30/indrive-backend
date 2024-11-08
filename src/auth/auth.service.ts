@@ -36,7 +36,9 @@ export class AuthService {
         newUser.roles = roles;
 
         const userSaved = await this.usersRepository.save(newUser);
-        const payload = { id: userSaved.id, name: userSaved.name };
+        const rolesString = userSaved.roles.map(rol => rol.id);
+
+        const payload = { id: userSaved.id, name: userSaved.name, roles: rolesString };
         const token = this.jwtService.sign(payload);
         const data = {
             user: userSaved,
@@ -63,7 +65,9 @@ export class AuthService {
             return new HttpException('La contraseña es incorrecta', HttpStatus.FORBIDDEN);
         }
 
-        const payload = { id: userFound.id, name: userFound.name };
+        const rolesIds = userFound.roles.map(rol => rol.id)
+
+        const payload = { id: userFound.id, name: userFound.name, roles: rolesIds };
         const token = this.jwtService.sign(payload);
         const data = {
             user: userFound,
