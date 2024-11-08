@@ -1,16 +1,18 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/user.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { compare } from 'bcrypt';
 import { RegisterAuthDto } from './dto/register-auth.dto';
 import { LoginAuthDto } from './dto/login-auth.dto';
 import { JwtService } from '@nestjs/jwt';
+import { Rol } from 'src/roles/rol.entity';
 
 @Injectable()
 export class AuthService {
     constructor(
         @InjectRepository(User) private usersRepository: Repository<User>,
+        @InjectRepository(Rol) private rolesRepository: Repository<Rol>,
         private jwtService: JwtService
     ){}
 
@@ -28,8 +30,12 @@ export class AuthService {
         }
 
         const newUser = this.usersRepository.create(user);
-        const userSaved = await this.usersRepository.save(newUser);
         
+        const rolesIds = user.rolesIds;
+        const roles = await this.rolesRepository.findBy({ id: In(rolesIds) })
+        newUser.roles = roles;
+
+        const userSaved = await this.usersRepository.save(newUser);
         const payload = { id: userSaved.id, name: userSaved.name };
         const token = this.jwtService.sign(payload);
         const data = {

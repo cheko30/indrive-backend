@@ -9,7 +9,8 @@ import storage = require('../utils/cloud_storage');
 @Injectable()
 export class UsersService {
 
-    constructor(@InjectRepository(User) private usersRepository: Repository<User>) {}
+    constructor(
+        @InjectRepository(User) private usersRepository: Repository<User>) {}
 
     create(user: CreateUserDto) {
         const newUser = this.usersRepository.create(user);
