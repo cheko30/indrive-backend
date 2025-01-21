@@ -21,17 +21,25 @@ export class AuthService {
         const emailExists = await this.usersRepository.findOneBy({email: user.email});
 
         if(emailExists) {
-            return new HttpException('El email ya esta registrado', HttpStatus.CONFLICT);
+            throw new HttpException('El email ya esta registrado', HttpStatus.CONFLICT);
         }
 
         const phoneExists = await this.usersRepository.findOneBy({phone: user.phone});
         if(phoneExists) {
-            return new HttpException('El telefono ya esta registrado', HttpStatus.CONFLICT);
+            throw new HttpException('El telefono ya esta registrado', HttpStatus.CONFLICT);
         }
 
         const newUser = this.usersRepository.create(user);
+
+        let rolesIds = []
         
-        const rolesIds = user.rolesIds;
+        if(user.rolesIds !== undefined && user.rolesIds != null) {
+            rolesIds = user.rolesIds;
+        } else {
+            rolesIds.push('CLIENT');
+        }
+        
+        
         const roles = await this.rolesRepository.findBy({ id: In(rolesIds) })
         newUser.roles = roles;
 
@@ -57,12 +65,12 @@ export class AuthService {
         });
 
         if(!userFound) {
-            return new HttpException('El email no esta registrado', HttpStatus.NOT_FOUND);
+            throw new HttpException('El email no esta registrado', HttpStatus.NOT_FOUND);
         }
 
         const isPasswordValid = await compare(password, userFound.password);
         if(!isPasswordValid) {
-            return new HttpException('La contraseña es incorrecta', HttpStatus.FORBIDDEN);
+            throw new HttpException('La contraseña es incorrecta', HttpStatus.FORBIDDEN);
         }
 
         const rolesIds = userFound.roles.map(rol => rol.id)
