@@ -1,6 +1,7 @@
-import { BeforeInsert, Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { hash} from "bcrypt";
 import { Rol } from "src/roles/rol.entity";
+import { DriversPosition } from "src/drivers_position/drivers_position.entity";
 
 @Entity({name: 'users'})
 export class User {
@@ -46,6 +47,9 @@ export class User {
     })
     @ManyToMany(() => Rol, (rol) => rol.users)
     roles: Rol[]
+
+    @OneToMany(() => DriversPosition, driversPosition => driversPosition.id_driver)
+    driversPosition: DriversPosition
 
     @BeforeInsert()
     async hashPassword() {
