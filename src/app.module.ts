@@ -6,6 +6,8 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { RolesModule } from './roles/roles.module';
 import { SocketModule } from './socket/socket.module';
+import { DriversPositionModule } from './drivers_position/drivers_position.module';
+import { ClientRequestsModule } from './client_requests/client_requests.module';
 
 @Module({
   imports: [
@@ -23,6 +25,8 @@ import { SocketModule } from './socket/socket.module';
     AuthModule,
     RolesModule,
     SocketModule,
+    DriversPositionModule,
+    ClientRequestsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
