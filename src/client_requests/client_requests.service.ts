@@ -1,7 +1,7 @@
 import { Client, DistanceMatrixResponseData, TravelMode } from '@googlemaps/google-maps-services-js';
 import { Injectable } from '@nestjs/common';
 
-const API_KEY = "AIzaSyBh1-kzSQ721V2ad_i3BKO_K5DZ_U1AVq4";
+const API_KEY = "API_KEY";
 
 @Injectable()
 export class ClientRequestsService extends Client {
